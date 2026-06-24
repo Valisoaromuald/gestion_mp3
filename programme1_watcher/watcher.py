@@ -11,7 +11,9 @@ class Watcher:
         actual_files = set(f for f in  Path(directory).rglob("*.mp3"))
         new_files = actual_files - self.mp3_files
         if(new_files):
-            self.mp3_files.add(new_files)
+            self.mp3_files.update(new_files)
+            return new_files
+        return set()
             
     def write_in_log_file(self,log_file_path:str,content:str)->None:
         try:
