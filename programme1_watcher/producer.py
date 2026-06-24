@@ -16,7 +16,6 @@ class Producer:
         )
         connexion = pika.BlockingConnection(parametres)
         channel = connexion.channel()
-        channel.queue_declare(queue=RABBITMQ["queue"],durable=True)
         
         return connexion,channel
     
