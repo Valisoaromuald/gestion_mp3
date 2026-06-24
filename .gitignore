@@ -2,3 +2,5 @@ programme1_watcher/watcher_venv/
 logs/
 venv/
 __pycache__/
+target/
+architecture.txt
