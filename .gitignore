@@ -4,3 +4,4 @@ venv/
 __pycache__/
 target/
 architecture.txt
+node_modules/
