@@ -4,9 +4,9 @@ const fs = require('fs');
 function supprimerFichier(cheminFichier) {
     try {
         fs.unlinkSync(cheminFichier);
-        console.log(`[✓] Fichier supprimé : ${cheminFichier}`);
+        writeInLogFile(LOG_FILE_PATH,`[✓] Fichier supprimé : ${cheminFichier}`);
     } catch (error) {
-        console.error(`[!] Erreur suppression : ${error.message}`);
+        writeInLogFile(LOG_FILE_PATH,`[!] Erreur suppression : ${error.message}`);
     }
 }
 

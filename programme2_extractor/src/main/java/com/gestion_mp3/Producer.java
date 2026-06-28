@@ -1,5 +1,7 @@
 package com.gestion_mp3;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -10,7 +12,7 @@ public class Producer {
     private Channel channel;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String LOG_FILE_PATH = Config.LOG_FILE_PATH;
-    
+
     public void connecter() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(Config.HOST);
@@ -21,9 +23,11 @@ public class Producer {
         connexion = factory.newConnection();
         channel = connexion.createChannel();
 
-        channel.queueDeclare(Config.QUEUE_OUT, false, false, false, null);
+        channel.queueDeclare(Config.QUEUE_OUT, true, false, false, Map.of(
+                "x-dead-letter-exchange", "mp3_sender_dlx",
+                "x-dead-letter-routing-key", "retry"));
 
-        Logger.writeInLogFile(LOG_FILE_PATH,"[*] Producer connecté, queue : " + Config.QUEUE_OUT);
+        Logger.writeInLogFile(LOG_FILE_PATH, "[*] Producer connecté, queue : " + Config.QUEUE_OUT);
     }
 
     public void publier(Mp3Metadata metadata) throws Exception {
@@ -36,7 +40,7 @@ public class Producer {
                 null,
                 message.getBytes("UTF-8"));
 
-        Logger.writeInLogFile(LOG_FILE_PATH,"[x] Métadonnées envoyées : " + message);
+        Logger.writeInLogFile(LOG_FILE_PATH, "[x] Métadonnées envoyées : " + message);
     }
 
     public void deconnecter() throws Exception {

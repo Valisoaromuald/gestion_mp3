@@ -3,14 +3,14 @@ const amqp = require('amqplib');
 const config = require('./config');
 const { writeInLogFile } = require('./logger');
 
-const LOG_FILE_PATH = config.logFilePath;
+const LOG_FILE_PATH = config.logs.log_file_path;
 const MAX_RETRY = 3;
 
-const QUEUE_ENTREE    = config.rabbitmq.queue;       // mp3_metadata
-const DLX             = 'mp3_sender_dlx';
-const RETRY_QUEUE     = 'mp3_sender_retry_queue';
-const DLQ             = 'mp3_sender_dlq';
-const TTL             = 5000;   
+const QUEUE_ENTREE = config.rabbitmq.queue;       // mp3_metadata
+const DLX = 'mp3_sender_dlx';
+const RETRY_QUEUE = 'mp3_sender_retry_queue';
+const DLQ = 'mp3_sender_dlq';
+const TTL = 5000;
 
 async function initRabbit(channel) {
 
@@ -21,8 +21,8 @@ async function initRabbit(channel) {
     await channel.assertQueue(QUEUE_ENTREE, {
         durable: true,
         arguments: {
-            'x-dead-letter-exchange'    : DLX,
-            'x-dead-letter-routing-key' : 'retry'
+            'x-dead-letter-exchange': DLX,       // mp3_sender_dlx
+            'x-dead-letter-routing-key': 'retry'
         }
     });
 
@@ -30,9 +30,9 @@ async function initRabbit(channel) {
     await channel.assertQueue(RETRY_QUEUE, {
         durable: true,
         arguments: {
-            'x-dead-letter-exchange'    : '',
-            'x-dead-letter-routing-key' : QUEUE_ENTREE,
-            'x-message-ttl'             : TTL
+            'x-dead-letter-exchange': '',
+            'x-dead-letter-routing-key': QUEUE_ENTREE,
+            'x-message-ttl': TTL
         }
     });
 
@@ -52,11 +52,9 @@ async function connecter() {
 
     const connexion = await amqp.connect(`amqp://${login}:${password}@${host}:${port}`);
     const channel = await connexion.createChannel();
-
-    await channel.assertQueue(queue, { durable: false });
     channel.prefetch(1);
 
-    writeInLogFile(LOG_FILE_PATH,`[*] En attente de messages sur : ${queue}`);
+    writeInLogFile(LOG_FILE_PATH, `[*] En attente de messages sur : ${queue}`);
 
     return { connexion, channel };
 }
@@ -98,7 +96,7 @@ async function consommer(channel, callback) {
                     writeInLogFile(LOG_FILE_PATH, `Retry ${retryCount + 1}/${MAX_RETRY} : ${contenu}`);
 
                 } else {
-                    // Envoyer dans la DLQ finale
+                    // Epour recnvoyer dans la DLQ finale
                     channel.publish(
                         'mp3_dlx',
                         'final',
@@ -119,4 +117,4 @@ async function consommer(channel, callback) {
     });
 }
 
-module.exports = { connecter, consommer };
+module.exports = { connecter, consommer, initRabbit };
