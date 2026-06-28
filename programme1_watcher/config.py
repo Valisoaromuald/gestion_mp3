@@ -1,14 +1,18 @@
-# Répertoire surveillé
-REPERTOIRE = "/home/tsialone/Musique/mozika"
+# config.py
+from dotenv import load_dotenv
+import os
 
-# Intervalle de vérification en secondes (5 minutes par défaut)
-INTERVALLE = 5 * 60
+load_dotenv("../.env")  # Chemin vers le .env à la racine
 
-# Configuration RabbitMQ
+REPERTOIRE = os.getenv("REPERTOIRE")
+INTERVALLE = int(os.getenv("INTERVALLE","300"))
+
 RABBITMQ = {
-    "host": "localhost",
-    "port": 5672,
-    "login": "guest",
-    "password": "guest",
-    "queue": "mp3_queue"
+    "host"    : os.getenv("RABBITMQ_HOST"),
+    "port"    : int(os.getenv("RABBITMQ_PORT","5672")),
+    "login"   : os.getenv("RABBITMQ_LOGIN"),
+    "password": os.getenv("RABBITMQ_MOT_DE_PASSE"),
+    "queue"   : os.getenv("RABBITMQ_QUEUE_MP3")
 }
+
+LOG_FILE_PATH = os.getenv("LOG_FILE_PATH")
