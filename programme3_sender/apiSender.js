@@ -15,60 +15,114 @@ const cacheMp3 = new Map();  // cheminFichier → id
 const cacheMetadata = new Map();
 
 async function envoyerArtiste(artiste) {
-    // Si déjà envoyé, retourner l'id depuis le cache
-    if (cacheArtistes.has(artiste)) {
-        writeInLogFile(LOG_FILE_PATH, `[~] Artiste déjà existant : ${artiste}`);
-        return { id: cacheArtistes.get(artiste) };
+    // Vérifier si l'artiste existe déjà en base via l'API
+    try {
+        const recherche = await axios.get(`${config.api.url}/api/artistes/nom/${encodeURIComponent(artiste)}`);
+
+        // Artiste trouvé (200 OK) → on le met en cache et on le retourne directement
+        cacheArtistes.set(artiste, recherche.data.id);
+        writeInLogFile(LOG_FILE_PATH, `[~] Artiste déjà existant en base : ${artiste}`);
+        return recherche.data;
+
+    } catch (erreur) {
+        // 404 = artiste non trouvé → on le crée
+        if (erreur.response && erreur.response.status === 404) {
+            const creation = await axios.post(
+                `${config.api.url}/api/artistes`,
+                { nom: artiste },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            cacheArtistes.set(artiste, creation.data.id);
+            writeInLogFile(LOG_FILE_PATH, `[✓] Artiste créé : ${artiste}`);
+            return creation.data;
+        }
+
+        // Toute autre erreur (500, réseau...) → on la remonte
+        writeInLogFile(LOG_FILE_PATH, `[✗] Erreur lors de l'envoi de l'artiste ${artiste} : ${erreur.message}`);
+        throw erreur;
     }
-
-    const response = await axios.post(`${config.api.url}/api/artistes`,
-        { nom: artiste },
-        { headers: { 'Content-Type': 'application/json' } }
-    );
-
-    // Stocker dans le cache
-    cacheArtistes.set(artiste, response.data.id);
-
-    writeInLogFile(LOG_FILE_PATH, `[✓] Artiste envoyé : ${artiste}`);
-    return response.data;
 }
 
+
 async function envoyerAlbum(album) {
-    if (cacheAlbums.has(album)) {
-        writeInLogFile(LOG_FILE_PATH, `[~] Album déjà existant : ${album}`);
-        return { id: cacheAlbums.get(album) };
+    // Vérifier si l'album existe déjà en base via l'API
+    try {
+        const recherche = await axios.get(`${config.api.url}/api/albums/libelle/${encodeURIComponent(album)}`);
+
+        // Album trouvé (200 OK) → on le retourne directement
+        writeInLogFile(LOG_FILE_PATH, `[~] Album déjà existant en base : ${album}`);
+        return recherche.data;
+
+    } catch (erreur) {
+        // 404 = album non trouvé → on le crée
+        if (erreur.response && erreur.response.status === 404) {
+            const creation = await axios.post(
+                `${config.api.url}/api/albums`,
+                { libelle: album },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            writeInLogFile(LOG_FILE_PATH, `[✓] Album créé : ${album}`);
+            return creation.data;
+        }
+
+        // Toute autre erreur (500, réseau...) → on la remonte
+        writeInLogFile(LOG_FILE_PATH, `[✗] Erreur lors de l'envoi de l'album ${album} : ${erreur.message}`);
+        throw erreur;
     }
-
-    const response = await axios.post(`${config.api.url}/api/albums`,
-        { libelle: album },
-        { headers: { 'Content-Type': 'application/json' } }
-    );
-
-    cacheAlbums.set(album, response.data.id);
-
-    writeInLogFile(LOG_FILE_PATH, `[✓] Album envoyé : ${album}`);
-    return response.data;
 }
 
 async function envoyerGenre(genre) {
-    if (cacheGenres.has(genre)) {
-        writeInLogFile(LOG_FILE_PATH, `[~] Genre déjà existant : ${genre}`);
-        return { id: cacheGenres.get(genre) };
+    try {
+        const recherche = await axios.get(`${config.api.url}/api/genres/libelle/${encodeURIComponent(genre)}`);
+
+        writeInLogFile(LOG_FILE_PATH, `[~] Genre déjà existant en base : ${genre}`);
+        return recherche.data;
+
+    } catch (erreur) {
+        if (erreur.response && erreur.response.status === 404) {
+            const creation = await axios.post(
+                `${config.api.url}/api/genres`,
+                { libelle: genre },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            writeInLogFile(LOG_FILE_PATH, `[✓] Genre créé : ${genre}`);
+            return creation.data;
+        }
+
+        writeInLogFile(LOG_FILE_PATH, `[✗] Erreur lors de l'envoi du genre ${genre} : ${erreur.message}`);
+        throw erreur;
     }
+}
 
-    const response = await axios.post(`${config.api.url}/api/genres`,
-        { libelle: genre },
-        { headers: { 'Content-Type': 'application/json' } }
-    );
+async function envoyerLangue(langue) {
+    try {
+        const recherche = await axios.get(`${config.api.url}/api/langues/libelle/${encodeURIComponent(langue)}`);
 
-    cacheGenres.set(genre, response.data.id);
+        writeInLogFile(LOG_FILE_PATH, `[~] Langue déjà existante en base : ${genre}`);
+        return recherche.data;
 
-    writeInLogFile(LOG_FILE_PATH, `[✓] Genre envoyé : ${genre}`);
-    return response.data;
+    } catch (erreur) {
+        if (erreur.response && erreur.response.status === 404) {
+            const creation = await axios.post(
+                `${config.api.url}/api/langues`,
+                { libelle: genre },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            writeInLogFile(LOG_FILE_PATH, `[✓] Langue créé : ${genre}`);
+            return creation.data;
+        }
+
+        writeInLogFile(LOG_FILE_PATH, `[✗] Erreur lors de l'envoi de la langue ${langue} : ${erreur.message}`);
+        throw erreur;
+    }
 }
 
 
-async function envoyerMp3Fichier(cheminFichier, idArtiste, idAlbum, idGenre) {
+async function envoyerMp3Fichier(cheminFichier, idArtiste, idAlbum, idGenre,idLangue) {
     if (cacheMp3.has(cheminFichier)) {
         writeInLogFile(LOG_FILE_PATH, `[~] MP3 déjà existant : ${cheminFichier}`);
         return { id: cacheMp3.get(cheminFichier) };
@@ -79,6 +133,8 @@ async function envoyerMp3Fichier(cheminFichier, idArtiste, idAlbum, idGenre) {
     if (idArtiste) form.append('id_artiste', idArtiste);
     if (idAlbum) form.append('id_album', idAlbum);
     if (idGenre) form.append('id_genre', idGenre);
+    if (idLangue) form.append('id_langue', idLangue);
+
 
     const response = await axios.post(`${config.api.url}/api/mp3`, form, {
         headers: { ...form.getHeaders() }
@@ -109,12 +165,13 @@ async function envoyerMetadata(titre, annee, duree, bitrate, frequence, idMp3) {
 
 async function envoyerMp3(metadata) {
     try {
-        const { cheminFichier, titre, artiste, genre, album, annee, duree, bitrate, frequence } = metadata;
+        const { cheminFichier, titre, artiste, genre, album,langue, annee, duree, bitrate, frequence } = metadata;
 
-        const [dataArtiste, dataAlbum, dataGenre] = await Promise.all([
+        const [dataArtiste, dataAlbum, dataGenre,dataLangue] = await Promise.all([
             artiste ? envoyerArtiste(artiste) : null,
             album ? envoyerAlbum(album) : null,
             genre ? envoyerGenre(genre) : null,
+            langue ? envoyerLangue(langue) : null
         ]);
 
         let dataMp3 = null;
@@ -123,7 +180,8 @@ async function envoyerMp3(metadata) {
                 cheminFichier,
                 dataArtiste?.id,
                 dataAlbum?.id,
-                dataGenre?.id
+                dataGenre?.id,
+                dataLangue?.id
             );
         }
 
