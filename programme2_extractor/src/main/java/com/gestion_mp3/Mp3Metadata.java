@@ -7,6 +7,10 @@ public class Mp3Metadata {
     private String album;
     private String annee;
     private String genre;
+    private String langue;
+   
+    
+
     private long duree;
     private long bitrate;
     private int frequence;
@@ -21,6 +25,7 @@ public class Mp3Metadata {
     public long getDuree()           { return duree; }
     public long getBitrate()         { return bitrate; }
     public int getFrequence()        { return frequence; }
+    public String getLangue()        { return langue; }
 
     // Setters
     public void setCheminFichier(String cheminFichier) { this.cheminFichier = cheminFichier; }
@@ -32,7 +37,7 @@ public class Mp3Metadata {
     public void setDuree(long duree)                   { this.duree = duree; }
     public void setBitrate(long bitrate)               { this.bitrate = bitrate; }
     public void setFrequence(int frequence)            { this.frequence = frequence; }
-
+    public void setLangue(String langue)               { this.langue = langue; }
     @Override
     public String toString() {
         return "Mp3Metadata{" +
@@ -42,6 +47,7 @@ public class Mp3Metadata {
             ", album='"  + album         + '\'' +
             ", annee='"  + annee         + '\'' +
             ", genre='"  + genre         + '\'' +
+            ", langue='"  + langue         + '\'' +
             ", duree="   + duree         +
             ", bitrate=" + bitrate       +
             ", frequence=" + frequence   +
