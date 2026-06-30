@@ -1,6 +1,7 @@
 // AlbumService.java
 package com.gestion_mp3.api.service;
 import com.gestion_mp3.api.model.Album;
+import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -19,5 +20,8 @@ public class AlbumService {
 
     public Optional<Album> findById(Integer id) {
         return repository.findById(id);
+    }
+      public Optional<Album> findByLibelle(String libelle) {
+        return repository.findByLabel(libelle);
     }
 }
