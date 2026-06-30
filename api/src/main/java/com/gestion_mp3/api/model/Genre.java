@@ -22,7 +22,7 @@ public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nom;
+    private String libelle;
     @OneToMany(mappedBy = "genre",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private List<Mp3> mp3;
 }

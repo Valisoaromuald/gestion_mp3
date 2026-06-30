@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Integer> {
-    @Query(value="SELECT * FROM genre WHERE libelle LIKE CONCAT('%', :libelle, '%')",nativeQuery=true)
+    @Query(value="SELECT * FROM genre WHERE LOWER(libelle) = LOWER(?)",nativeQuery=true)
     public Optional<Genre>findByLabel(@Param("libelle") String libelle);
 }

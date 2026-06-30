@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Integer> {
-        @Query(value="SELECT * FROM album WHERE libelle LIKE CONCAT('%', :libelle, '%')",nativeQuery=true)
+        @Query(value="SELECT * FROM album WHERE LOWER(libelle) = LOWER(:libelle)",nativeQuery=true)
     public Optional<Album>findByLabel(@Param("libelle") String libelle);
 }
