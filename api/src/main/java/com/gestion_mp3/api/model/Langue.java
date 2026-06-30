@@ -16,6 +16,6 @@ public class Langue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String libelle;
-    @OneToMany(mappedBy = "genre",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "langue",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private List<Mp3> mp3;
 }
