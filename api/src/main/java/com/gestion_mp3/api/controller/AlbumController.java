@@ -1,7 +1,12 @@
 // AlbumController.java
 package com.gestion_mp3.api.controller;
+
 import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.service.AlbumService;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,4 +30,25 @@ public class AlbumController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping
+    public ResponseEntity<?> findAlbums(@RequestParam(required = false) String libelle) {
+
+        boolean libelleFourni = libelle != null && !libelle.isEmpty();
+
+        if (libelleFourni) {
+            Optional<Album> albumTrouve = service.findByLibelle(libelle);
+
+            if (albumTrouve.isPresent()) {
+                Album album = albumTrouve.get();
+                return ResponseEntity.ok(album);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            List<Album> tousLesAlbums = service.findAll();
+            return ResponseEntity.ok(tousLesAlbums);
+        }
+    }
+
 }
