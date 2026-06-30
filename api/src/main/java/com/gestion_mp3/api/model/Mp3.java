@@ -37,4 +37,7 @@ public class Mp3 {
     @ManyToOne
     @JoinColumn(name = "id_genre")
     private Genre genre;
+    @ManyToOne
+    @JoinColumn(name = "id_langue")
+    private Langue langue;
 }
