@@ -1,15 +1,15 @@
 // index.js
 const { connecter, initRabbit, consommer } = require('./consumer');
-const { envoyerMp3 }                       = require('./apiSender');
+const { envoyerMp3, readBlackList }                       = require('./apiSender');
 const { supprimerFichier }                 = require('./cleaner');
 
 async function main() {
     const { connexion, channel } = await connecter();
 
     await initRabbit(channel);
-
+    const blacklist = await readBlackList()
     await consommer(channel, async (metadata) => {
-        await envoyerMp3(metadata);
+        await envoyerMp3(metadata,blacklist);
         supprimerFichier(metadata.cheminFichier);
     });
 
