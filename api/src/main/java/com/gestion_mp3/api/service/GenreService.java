@@ -1,5 +1,6 @@
 // GenreService.java
 package com.gestion_mp3.api.service;
+import com.gestion_mp3.api.model.Artiste;
 import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.repository.GenreRepository;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,8 @@ public class GenreService {
 
     public Optional<Genre> findById(Integer id) {
         return repository.findById(id);
+    }
+      public Optional<Genre> findByLibelle(String libelle) {
+        return repository.findByLabel(libelle);
     }
 }

@@ -1,6 +1,4 @@
 package com.gestion_mp3.api.model;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -15,17 +13,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-public class Artiste {
+public class Langue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nom;
-    @OneToMany(mappedBy = "artiste",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    private String libelle;
+    @OneToMany(mappedBy = "langue",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     @JsonIgnore
     private List<Mp3> mp3;
 }

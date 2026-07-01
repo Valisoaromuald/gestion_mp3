@@ -14,5 +14,8 @@ module.exports = {
     },
     logs : {
         log_file_path: process.env.LOG_FILE_PATH
+    },
+    blacklist:{
+        file_path: process.env.BLACKLIST_FILE_PATH
     }
 };
