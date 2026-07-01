@@ -2,6 +2,7 @@ package com.gestion_mp3.api.controller;
 
 import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.model.Artiste;
+import com.gestion_mp3.api.model.Langue;
 import com.gestion_mp3.api.service.ArtisteService;
 
 import java.util.List;
@@ -43,4 +44,10 @@ public class ArtisteController {
         }
     }
 
-}
+    @GetMapping("/nom/{name}")
+    public ResponseEntity<Artiste> findByName(@PathVariable(name="name") String name){    
+        return service.findByNom(name) // renvoie un Optional<Album>
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+} 

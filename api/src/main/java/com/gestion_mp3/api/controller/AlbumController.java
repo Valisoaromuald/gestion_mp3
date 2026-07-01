@@ -2,6 +2,7 @@
 package com.gestion_mp3.api.controller;
 
 import com.gestion_mp3.api.model.Album;
+import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.service.AlbumService;
 
 import java.util.List;
@@ -24,31 +25,17 @@ public class AlbumController {
         return ResponseEntity.ok(service.inserer(album));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Album> findById(@PathVariable Integer id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAlbums(@RequestParam(required = false) String libelle) {
-
-        boolean libelleFourni = libelle != null && !libelle.isEmpty();
-
-        if (libelleFourni) {
-            Optional<Album> albumTrouve = service.findByLibelle(libelle);
-
-            if (albumTrouve.isPresent()) {
-                Album album = albumTrouve.get();
-                return ResponseEntity.ok(album);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            List<Album> tousLesAlbums = service.findAll();
-            return ResponseEntity.ok(tousLesAlbums);
-        }
+    @GetMapping("/libelle/{libelle}")
+    public ResponseEntity<Album> findByLibelle(@PathVariable String libelle) {
+        return service.findByLibelle(libelle) // renvoie un Optional<Album>
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-
 }

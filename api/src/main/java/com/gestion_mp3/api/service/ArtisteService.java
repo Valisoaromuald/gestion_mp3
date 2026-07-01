@@ -23,11 +23,7 @@ public class ArtisteService {
     public Optional<Artiste> findById(Integer id) {
         return repository.findById(id);
     }
-
     public Optional<Artiste> findByNom(String nom) {
-        return repository.findByNom(nom);
-    }
-    public List<Artiste> findAll(){
-        return repository.findAll();
+        return repository.findByName(nom);
     }
 }
