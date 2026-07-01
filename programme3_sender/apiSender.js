@@ -1,11 +1,18 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const fsPromise = require('fs/promises');
 const config = require('./config');
 const { writeInLogFile } = require('./logger');
 
 const LOG_FILE_PATH = config.logs.log_file_path;
-const cacheMp3 = new Map();
+const BLACKLIST_FILE_PATH = config.logs.log_file_path;
+
+// Cache en mémoire pour éviter les doublons
+const cacheArtistes = new Map();  // nom → id
+const cacheAlbums = new Map();  // libelle → id
+const cacheGenres = new Map();  // libelle → id
+const cacheMp3 = new Map();  // cheminFichier → id
 const cacheMetadata = new Map();
 
 async function envoyerArtiste(artiste) {
@@ -157,41 +164,81 @@ async function envoyerMetadata(titre, annee, duree, bitrate, frequence, idMp3) {
     return response.data;
 }
 
-async function envoyerMp3(metadata) {
+async function readBlackList() {
+    const data = await fsPromise.readFile(BLACKLIST_FILE_PATH, 'utf8');
+
+    const lignes = data.split('\n');
+
+    let artistes = [];
+    let genres = [];
+
+    for (const ligne of lignes) {
+        const [cle, valeur] = ligne.split(':');
+
+        if (!cle || !valeur) continue;
+
+        const cleanKey = cle.trim();
+        const values = valeur.split(',').map(v => v.trim()).filter(Boolean);
+
+        if (cleanKey === 'artistes') {
+            artistes = values;
+        }
+
+        if (cleanKey === 'genres') {
+            genres = values;
+        }
+    }
+    return {
+        artistes:artistes,
+        genres:genres
+    }
+}
+
+ function isBlackListed(metadata,blacklist) {
+    
+    const blacklistedArtists = blacklist.artistes
+    const blacklistedGender= blacklist.genres
+    const artistInBl = blacklistedArtists.filter(artist => artist.toLowerCase().trim() === metadata.artiste.toLowerCase().trim())
+    const genderInBl = blacklistedArtists.filter(artist=> artist.toLowerCase().trim() === metadata.genre.toLowerCase().trim())
+    return !!artistInBl || !!genderInBl
+}
+
+
+async function envoyerMp3(metadata,blacklist) {
     try {
-        const { cheminFichier, titre, annee, duree, bitrate, frequence } = metadata;
-        //  Nettoyage de toutes les valeurs texte
-        const artistePropre = metadata.artiste?.trim() || null;
-        const albumPropre = metadata.album?.trim() || null;
-        const genrePropre = metadata.genre?.trim() || null;
-        const languePropre = metadata.langue?.trim() || null;
-        
-        const [dataArtiste, dataAlbum, dataGenre, dataLangue] = await Promise.all([
-            artistePropre ? envoyerArtiste(artistePropre) : null,
-            albumPropre ? envoyerAlbum(albumPropre) : null,
-            genrePropre ? envoyerGenre(genrePropre) : null,
-            languePropre ? envoyerLangue(languePropre) : null
-        ]);
-        let dataMp3 = null;
-        if (cheminFichier) {
-            dataMp3 = await envoyerMp3Fichier(
-                cheminFichier,
-                dataArtiste?.id,
-                dataAlbum?.id,
-                dataGenre?.id,
-                dataLangue?.id
-            );
+        const { cheminFichier, titre, artiste, genre, album,langue, annee, duree, bitrate, frequence } = metadata;
+        const isBl = isBlackListed(metadata,blacklist)
+        if(isBl === false){
+            const [dataArtiste, dataAlbum, dataGenre,dataLangue] = await Promise.all([
+                artiste ? envoyerArtiste(artiste) : null,
+                album ? envoyerAlbum(album) : null,
+                genre ? envoyerGenre(genre) : null,
+                langue ? envoyerLangue(langue) : null
+            ]);
+            let dataMp3 = null;
+            if (cheminFichier) {
+                dataMp3 = await envoyerMp3Fichier(
+                    cheminFichier,
+                    dataArtiste?.id,
+                    dataAlbum?.id,
+                    dataGenre?.id,
+                    dataLangue?.id
+                );
+            }
+    
+            if (titre && duree && bitrate && frequence && dataMp3?.id) {
+                await envoyerMetadata(titre, annee, duree, bitrate, frequence, dataMp3.id);
+            }
+    
+            writeInLogFile(LOG_FILE_PATH, `[✓] Traitement complet : ${titre}`);
         }
-        if (titre && duree && bitrate && frequence && dataMp3?.id) {
-            await envoyerMetadata(titre, annee, duree, bitrate, frequence, dataMp3.id);
+        else{
+            writeInLogFile(LOG_FILE_PATH, `[X] fichier dans la liste noire: artiste: ${artiste} genre:${genre} `);
         }
-
-        writeInLogFile(LOG_FILE_PATH, `[✓] Traitement complet : ${titre}`);
-
     } catch (error) {
         writeInLogFile(LOG_FILE_PATH, `[!] Echec envoi : ${error.message}`);
         throw error;
     }
 }
 
-module.exports = { envoyerMp3 };
+module.exports = { envoyerMp3,readBlackList };
