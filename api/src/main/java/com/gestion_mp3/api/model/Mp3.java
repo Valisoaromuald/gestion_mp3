@@ -1,4 +1,7 @@
 package com.gestion_mp3.api.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,9 +28,10 @@ public class Mp3 {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Lob
+    @JsonIgnore
     @Column(name = "fichier")
     private byte[] fichier;
-    @OneToOne(mappedBy = "mp3",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToOne(mappedBy = "mp3", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Metadata metadata;
     @ManyToOne
     @JoinColumn(name = "id_album")

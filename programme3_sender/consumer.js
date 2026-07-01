@@ -71,10 +71,9 @@ async function consommer(channel, callback) {
             writeInLogFile(LOG_FILE_PATH, `Reçu: ${contenu}`);
 
             const metadata = JSON.parse(contenu);
-
             await callback(metadata);
-
             channel.ack(message);
+            
 
         } catch (error) {
             try {
@@ -85,7 +84,7 @@ async function consommer(channel, callback) {
                 if (retryCount < MAX_RETRY) {
                     // Renvoyer dans le DLX avec routing key retry
                     channel.publish(
-                        'mp3_dlx',
+                        DLX,
                         'retry',
                         message.content,
                         {
@@ -98,7 +97,7 @@ async function consommer(channel, callback) {
                 } else {
                     // Epour recnvoyer dans la DLQ finale
                     channel.publish(
-                        'mp3_dlx',
+                        DLX,
                         'final',
                         message.content,
                         {}

@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,5 +26,6 @@ public class Artiste {
     private Integer id;
     private String nom;
     @OneToMany(mappedBy = "artiste",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Mp3> mp3;
 }

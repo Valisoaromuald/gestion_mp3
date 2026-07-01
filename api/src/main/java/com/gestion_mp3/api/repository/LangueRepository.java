@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.gestion_mp3.api.model.Langue;
 @Repository
 public interface LangueRepository extends JpaRepository<Langue, Integer> {
-    @Query(value="SELECT * FROM langue WHERE libelle LIKE CONCAT('%', :libelle, '%')",nativeQuery=true)
+    @Query(value="SELECT * FROM langue WHERE LOWER(libelle) = LOWER(?)",nativeQuery=true)
     public Optional<Langue>findByLabel(@Param("libelle") String libelle);
 }
