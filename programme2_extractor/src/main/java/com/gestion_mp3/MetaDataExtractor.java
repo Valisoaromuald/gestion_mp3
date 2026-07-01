@@ -26,7 +26,6 @@ public class MetaDataExtractor {
         metadata.setDuree(header.getTrackLength());         // en secondes
         metadata.setBitrate(header.getBitRateAsNumber());   // en kbps
         metadata.setFrequence(header.getSampleRateAsNumber()); // en Hz
-
         return metadata;
     }
 } 
