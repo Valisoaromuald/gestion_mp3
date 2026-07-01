@@ -1,6 +1,8 @@
 package com.gestion_mp3.api.model;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,5 +26,6 @@ public class Genre {
     private Integer id;
     private String libelle;
     @OneToMany(mappedBy = "genre",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Mp3> mp3;
 }

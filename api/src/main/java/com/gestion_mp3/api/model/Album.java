@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,5 +32,6 @@ public class Album {
     private Integer id;
     private String libelle;
     @OneToMany(mappedBy = "album",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Mp3> mp3;
 }
