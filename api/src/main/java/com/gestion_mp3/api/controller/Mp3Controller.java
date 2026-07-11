@@ -7,12 +7,16 @@ import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.model.Langue;
 import com.gestion_mp3.api.model.Mp3;
 import com.gestion_mp3.api.service.Mp3Service;
+import com.gestion_mp3.dto.Mp3Dto;
 import com.gestion_mp3.dto.Mp3ResponseDto;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,5 +54,35 @@ public class Mp3Controller {
         Mp3 mp3Insere = service.inserer(mp3);
 
         return ResponseEntity.ok(new Mp3ResponseDto(mp3Insere));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Mp3Dto>> findAll() {
+        List<Mp3Dto> result = service.findAll().stream()
+                .map(mp3 -> {
+    `              var metadata = mp3.getMetadata();
+
+                    return Mp3Dto.builder()
+                            .id(mp3.getId())
+                            .titre(metadata != null ? metadata.getTitre() : null)
+                            .annee(metadata != null ? metadata.getAnnee() : null)
+                            .bitrate(metadata != null ? metadata.getBitrate() : null)
+                            .duree(metadata != null ? metadata.getDuree() : null)
+                            .frequence(metadata != null ? metadata.getFrequence() : null)
+                            .url("/api/mp3/stream/" + mp3.getId())
+                            .build();
+                })
+                .toList();
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/stream/{id}")
+    public ResponseEntity<byte[]> stream(@PathVariable Integer id) {
+
+        Mp3 mp3 = service.findById(id);
+        return ResponseEntity.ok()
+                .header("Content-Type", "audio/mpeg")
+                .body(mp3.getFichier());
     }
 }

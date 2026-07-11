@@ -5,7 +5,7 @@ class GestionMp3Api {
     public instance: AxiosInstance;
     constructor() {
         this.instance = axios.create({
-            baseURL: import.meta.env.VITE_DOLIBARR_URL,
+            baseURL: import.meta.env.API_URL,
         })
     }
     public async get<T = any>(endpoint: string, params: any = {}): Promise<AxiosResponse<T>> {

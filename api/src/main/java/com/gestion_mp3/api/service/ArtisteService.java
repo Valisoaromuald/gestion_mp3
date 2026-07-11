@@ -1,6 +1,5 @@
 // ArtisteService.java
 package com.gestion_mp3.api.service;
-import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.model.Artiste;
 import com.gestion_mp3.api.repository.ArtisteRepository;
 import org.springframework.stereotype.Service;
@@ -25,5 +24,8 @@ public class ArtisteService {
     }
     public Optional<Artiste> findByNom(String nom) {
         return repository.findByName(nom);
+    }
+    public List<Artiste> findAll(){
+        return repository.findAll();
     }
 }

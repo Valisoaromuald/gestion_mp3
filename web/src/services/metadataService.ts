@@ -11,7 +11,9 @@ class MetadataService{
             titre: titre,
             annee:annee,
             duree:duree,
-            idMp3:idMp3
+            mp3:{
+                id:idMp3
+            }
         }
         
     }

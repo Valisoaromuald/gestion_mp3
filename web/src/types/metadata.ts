@@ -4,4 +4,5 @@ export interface IMetadata{
     annee: number
     duree:number
     idMp3:number
+    [key:string]: any
 }

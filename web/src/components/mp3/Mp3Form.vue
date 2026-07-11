@@ -23,6 +23,10 @@
                 <input class="form-control" type="text" id="album" v-model="formData.album" required>
             </div>
             <div class="col-md-6">
+                <label for="langue" class="form-label">Langue</label>
+                <input class="form-control" type="text" id="langue" v-model="formData.langue" required>
+            </div>
+            <div class="col-md-6">
                 <label for="annee" class="form-label">Année</label>
                 <input class="form-control" type="number" id="annee" v-model.number="formData.annee" min="1900"
                     :max="anneeMax">
@@ -46,15 +50,16 @@
 <script setup lang="ts">
 import { useMorceauForm } from '@/composables/mp3/useMorceauForm'
 
-const { formData, fichier, anneeMax, handleFileChange, resetForm, isValid,messageAfterAction } = useMorceauForm()
 
-function handleSubmit() {
+const { formData, fichier, anneeMax, handleFileChange, resetForm, isValid,messageAfterAction,insertMp3 } = useMorceauForm()
+
+async function handleSubmit() {
     if (!isValid()) {
         alert('Veuillez remplir tous les champs et sélectionner un fichier.')
         return
     }
-
     console.log('Données du formulaire :', { ...formData, fichier: fichier.value })
+    await insertMp3()
     // emit('submit', { ...formData, fichier: fichier.value })
 }
 </script>

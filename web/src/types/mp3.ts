@@ -3,6 +3,7 @@ export interface MorceauForm {
     titre:string
     album: string
     genre:string
+    langue:string
     annee: number | null
     duree: string
 }

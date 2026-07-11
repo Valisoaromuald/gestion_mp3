@@ -2,11 +2,7 @@
 package com.gestion_mp3.api.controller;
 
 import com.gestion_mp3.api.model.Album;
-import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.service.AlbumService;
-
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +30,7 @@ public class AlbumController {
 
     @GetMapping("/libelle/{libelle}")
     public ResponseEntity<Album> findByLibelle(@PathVariable String libelle) {
+        System.out.println("mankato ve o: "+libelle);
         return service.findByLibelle(libelle) // renvoie un Optional<Album>
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
