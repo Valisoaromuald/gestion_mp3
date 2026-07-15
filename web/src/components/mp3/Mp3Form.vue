@@ -45,21 +45,20 @@
             </div>
         </form>
     </div>
-    {{ messageAfterAction }}
 </template>
 <script setup lang="ts">
 import { useMorceauForm } from '@/composables/mp3/useMorceauForm'
+import { useToast } from '@/composables/ui/toast/useToast'
 
 
 const { formData, fichier, anneeMax, handleFileChange, resetForm, isValid,messageAfterAction,insertMp3 } = useMorceauForm()
-
+const toast = useToast()
 async function handleSubmit() {
     if (!isValid()) {
-        alert('Veuillez remplir tous les champs et sélectionner un fichier.')
+        toast.info('Veuillez remplir tous les champs et sélectionner un fichier.')
         return
     }
-    console.log('Données du formulaire :', { ...formData, fichier: fichier.value })
     await insertMp3()
-    // emit('submit', { ...formData, fichier: fichier.value })
+    toast.notifyCreated("Mp3")
 }
 </script>
