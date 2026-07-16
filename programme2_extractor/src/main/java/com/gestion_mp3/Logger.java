@@ -15,7 +15,6 @@ public class Logger {
 
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(logFilePath, true))) {
-
             writer.write("[" + dt + "]> " + content);
             writer.newLine();
 

@@ -1,5 +1,6 @@
 // GenreRepository.java
 package com.gestion_mp3.api.repository;
+import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.model.Langue;
 

@@ -1,14 +1,13 @@
-from config import REPERTOIRE, INTERVALLE
+from config import REPERTOIRE, INTERVALLE , LOG_FILE_PATH
 from watcher import Watcher
 from producer import  Producer
 import time
 class Main:
     if __name__ == "__main__":
-        print(REPERTOIRE)
         watcher = Watcher()
         producer = Producer()
         connexion, channel = producer.connect()
-        log_file_path = "/home/tsialone/Documents/S6/Mr Naina/programmation_message/gestion_mp3/logs/output.txt"
+        log_file_path = LOG_FILE_PATH
 
         try:
             while True:
@@ -16,10 +15,12 @@ class Main:
                 try:
                     for f in new_files:
                         producer.publish(channel, f)
-                        watcher.write_in_log_file(log_file_path, f"{str(f)} envoye")
+                        if log_file_path is not None: 
+                            watcher.write_in_log_file(log_file_path, f"{str(f)} envoye")
 
                 except Exception as e:
-                    watcher.write_in_log_file(log_file_path,f"Erreur : {e}")
+                    if log_file_path is not None: 
+                        watcher.write_in_log_file(log_file_path,f"Erreur : {e}")
                 time.sleep(INTERVALLE)
 
         except KeyboardInterrupt:

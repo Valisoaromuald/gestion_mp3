@@ -1,6 +1,5 @@
 // config.js
 require('dotenv').config({ path: '../.env' });
-console.log(process.env.LOG_FILE_PATH)
 module.exports = {
     rabbitmq: {
         host    : process.env.RABBITMQ_HOST,

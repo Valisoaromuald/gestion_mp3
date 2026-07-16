@@ -4,6 +4,8 @@ import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service

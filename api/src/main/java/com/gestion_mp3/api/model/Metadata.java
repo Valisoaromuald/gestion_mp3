@@ -1,4 +1,6 @@
 package com.gestion_mp3.api.model;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,5 +29,6 @@ public class Metadata {
     private long bitrate;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_mp3")
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private Mp3 mp3;
 }

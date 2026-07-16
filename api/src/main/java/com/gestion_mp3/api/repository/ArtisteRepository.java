@@ -1,6 +1,7 @@
 
 // ArtisteRepository.java
 package com.gestion_mp3.api.repository;
+import com.gestion_mp3.api.model.Album;
 import com.gestion_mp3.api.model.Artiste;
 import com.gestion_mp3.api.model.Langue;
 

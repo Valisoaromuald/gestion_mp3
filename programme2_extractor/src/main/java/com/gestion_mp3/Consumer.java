@@ -46,7 +46,7 @@ public class Consumer {
                         "x-dead-letter-routing-key", QUEUE_ENTREE,
                         "x-message-ttl", 5000 // 5 secondes
                 ));
-
+                
         channel.queueBind(
                 "mp3_retry_queue",
                 "mp3_dlx",

@@ -1,6 +1,5 @@
 // GenreService.java
 package com.gestion_mp3.api.service;
-import com.gestion_mp3.api.model.Artiste;
 import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.repository.GenreRepository;
 import org.springframework.stereotype.Service;
