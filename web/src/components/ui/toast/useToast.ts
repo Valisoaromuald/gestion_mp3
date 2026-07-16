@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 export type ToastType = 'success' | 'error' | 'info'
 
@@ -9,15 +9,13 @@ export interface Toast {
 }
 
 // État global partagé par tous les composants qui utilisent useToast()
-const state = reactive<{ toasts: Toast[] }>({
-  toasts: []
-})
+const toasts = ref<Toast[]>([])
 
 let nextId = 1
 
 function push(message: string, type: ToastType = 'success', duration: number = 3000): number {
   const id = nextId++
-  state.toasts.push({ id, message, type })
+  toasts.value.push({ id, message, type })
 
   if (duration > 0) {
     setTimeout(() => remove(id), duration)
@@ -27,13 +25,13 @@ function push(message: string, type: ToastType = 'success', duration: number = 3
 }
 
 function remove(id: number): void {
-  const index = state.toasts.findIndex(t => t.id === id)
-  if (index !== -1) state.toasts.splice(index, 1)
+  const index = toasts.value.findIndex((t:Toast) => t.id === id)
+  if (index !== -1) toasts.value.splice(index, 1)
 }
 
 export function useToast() {
   return {
-    toasts: state.toasts,
+    toasts: toasts,
 
     // Raccourcis pratiques pour CRUD
     success: (msg: string, duration?: number) => push(msg, 'success', duration),

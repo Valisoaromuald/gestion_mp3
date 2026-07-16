@@ -16,6 +16,8 @@ import com.gestion_mp3.api.repository.MetadataRepository;
 import com.gestion_mp3.api.repository.Mp3FichierRepository;
 import com.gestion_mp3.api.repository.Mp3Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,14 +37,14 @@ public class Mp3Service {
     private final AlbumRepository albumRepository;
     private final LangueRepository langueRepository;
 
-
     public Mp3Service(Mp3Repository repository, Mp3FichierRepository mp3fichierRepository,
-            MetadataRepository metadataRepository,ArtisteRepository artisteRepository,GenreRepository genreRepository,AlbumRepository albumRepository,LangueRepository langueRepository) {
+            MetadataRepository metadataRepository, ArtisteRepository artisteRepository, GenreRepository genreRepository,
+            AlbumRepository albumRepository, LangueRepository langueRepository) {
         this.repository = repository;
         this.mp3fichierRepository = mp3fichierRepository;
         this.metadataRepository = metadataRepository;
         this.artisteRepository = artisteRepository;
-        this.genreRepository =  genreRepository;
+        this.genreRepository = genreRepository;
         this.albumRepository = albumRepository;
         this.langueRepository = langueRepository;
     }
@@ -70,8 +72,8 @@ public class Mp3Service {
     }
 
     @Transactional(readOnly = true)
-    public List<Mp3> findAll() {
-        return repository.findAllWithDetails();
+    public Page<Mp3> findAll(Pageable pageable) {
+        return repository.findAllWithDetails(pageable);
     }
 
     @Transactional
@@ -115,7 +117,6 @@ public class Mp3Service {
                 metadata.setAnnee(annee);
             metadataRepository.save(metadata);
         }
-
         Mp3 mp3Sauvegarde = repository.save(mp3);
 
         if (fichierBytes != null) {
@@ -126,5 +127,14 @@ public class Mp3Service {
         }
 
         return mp3Sauvegarde;
+    }
+
+    @Transactional
+    public void supprimer(Integer id) {
+        Mp3 mp3 = repository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mp3 introuvable avec l'id : " + id));
+
+        repository.delete(mp3);
     }
 }

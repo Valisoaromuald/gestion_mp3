@@ -1,5 +1,5 @@
 <!--
-  1) Placez <ToastContainer /> UNE SEULE FOIS dans votre App.vue (racine),
+  1) Placez <~ontainer /> UNE SEULE FOIS dans votre App.vue (racine),
      pour que les toasts s'affichent au-dessus de toute l'application.
 
   2) Dans n'importe quel composant, importez useToast() et appelez

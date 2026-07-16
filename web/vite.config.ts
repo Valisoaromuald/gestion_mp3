@@ -9,7 +9,7 @@ import path from 'node:path'
 export default defineConfig({
   plugins: [
     vue(),
-    // vueDevTools(),
+    vueDevTools(),
   ],
   envDir: path.resolve(__dirname, '..'),
   envPrefix: [ 'API_'] ,

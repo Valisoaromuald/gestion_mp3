@@ -5,7 +5,9 @@
                 <button type="button" class="btn-close-custom" @click="display = false" aria-label="Fermer">
                     &times;
                 </button>
+                <h1 class="display-5">Modification metadata mp3</h1>
                 <div class="container">
+                    
                     <form class="row g-3" @submit.prevent="handleSubmit">
                         <div class="col-md-6">
                             <label for="artiste" class="form-label">Artiste</label>
@@ -51,9 +53,9 @@ const display = defineModel<boolean>({ default: false });
 const props = withDefaults(defineProps<{mp3? : IMp3 | null}>(),{
     mp3:null
 })
-const {modalForm} = useMp3Modal()
-function handleSubmit() {
-    console.log('Formulaire soumis')
+const {modalForm,handleUpdateMp3} = useMp3Modal()
+async function handleSubmit() {
+   await handleUpdateMp3();
 }
 </script>
 <style scoped>
@@ -64,7 +66,7 @@ function handleSubmit() {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1050;
+    z-index: 999;
 }
 
 .modal-dialog {

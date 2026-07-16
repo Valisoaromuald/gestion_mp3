@@ -1,4 +1,5 @@
 export interface MorceauForm {
+    id?:number
     artiste: string
     titre:string
     album: string
@@ -6,6 +7,7 @@ export interface MorceauForm {
     langue:string
     annee: number | null
     duree: string
+
 }
 export interface IMp3{
     id: number

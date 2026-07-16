@@ -48,10 +48,10 @@
 </template>
 <script setup lang="ts">
 import { useMorceauForm } from '@/composables/mp3/useMorceauForm'
-import { useToast } from '@/composables/ui/toast/useToast'
+import { useToast } from '@/components/ui/toast/useToast'
 
 
-const { formData, fichier, anneeMax, handleFileChange, resetForm, isValid,messageAfterAction,insertMp3 } = useMorceauForm()
+const { formData, anneeMax, handleFileChange, resetForm, isValid,insertMp3 } = useMorceauForm()
 const toast = useToast()
 async function handleSubmit() {
     if (!isValid()) {

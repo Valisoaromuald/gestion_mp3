@@ -1,7 +1,10 @@
 <template>
-    <Mp3Form/>
-    <Mp3List/>
-    <Mp3Modal />
+    <div class="container">
+        <h1>CRUD MP3</h1>
+        <Mp3Form />
+        <Mp3List />
+        <Mp3Modal />
+    </div>
 </template>
 <script setup lang="ts">
 import Mp3Form from '@/components/mp3/Mp3Form.vue';

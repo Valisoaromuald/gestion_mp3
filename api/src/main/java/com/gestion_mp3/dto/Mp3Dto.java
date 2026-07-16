@@ -19,5 +19,6 @@ public class Mp3Dto {
     private String artiste;
     private String album;
     private String genre;
+    private String langue;
     private String url;
 }

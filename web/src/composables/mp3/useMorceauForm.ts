@@ -1,3 +1,4 @@
+import { gestionMp3Api } from '@/api/clients/gestionMp3Api'
 import { albumService } from '@/services/albumService'
 import { artisteService } from '@/services/ArtisteService'
 import { genreService } from '@/services/genreService'
@@ -76,6 +77,7 @@ export function useMorceauForm() {
                 const mp3FormData: FormData = mp3Service.buildMp3FormData(fichier.value,idArtiste, idAlbum, idGenre,idLangue)
                 const idMp3 = (await mp3Service.create<FormData, any>(mp3Endpoint, mp3FormData, { headers: { "Content-Type": "multipart/form-data" } })).id ?? 0
                 const metadataInput: Partial<IMetadata> = metadataService.createInputObject(formData.titre, formData.annee ?? 0, dateUtils.convertTimeToSeconds(formData.duree), idMp3)
+                await gestionMp3Api.post<Partial<IMetadata>>(metadataService.endpoint,metadataInput)
                 messageAfterAction.value = 'mp3 insere avec succes';
             }
         } catch (error) {

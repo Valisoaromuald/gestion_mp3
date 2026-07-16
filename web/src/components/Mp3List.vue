@@ -1,4 +1,5 @@
 <template>
+  
   <div class="container mt-4">
     <!-- État de chargement -->
     <div v-if="loading" class="d-flex flex-column align-items-center justify-content-center py-5">
@@ -26,22 +27,30 @@
         </div>
         <div style="grid-template-columns: 1fr 1fr;" class="d-grid gap-0 column-gap-3">
           <button type="button" class="btn btn-success" @click="handleOpenModal(mp3)">Modifier</button>
-          <button type="button" class="btn btn-danger">Supprimer</button>
+          <button type="button" class="btn btn-danger" @click="handleDeleteMp3(mp3.id)">Supprimer</button>
         </div>
       </li>
     </ul>
   </div>
   <Mp3Modal v-model="openModal" />
+  <Pagination v-model:currentPage="currentPage" :total-pages="totalPages" />
 </template>
 
 <script setup lang="ts">
 import { useMp3List } from '@/composables/mp3/useMp3List'
 import { useMp3Modal } from '@/composables/mp3/useMp3Modal'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Mp3Modal from './mp3/Mp3Modal.vue'
-
-const { mp3List, error, loading, getMp3List } = useMp3List()
+import { useMp3Delete } from '@/composables/mp3/useMp3Delete.js'
+import Pagination from './ui/pagination/Pagination.vue'
+import { watch } from 'vue'
+const { mp3List, error, loading, getMp3List,currentPage,totalPages } = useMp3List()
 const {openModal,handleOpenModal} = useMp3Modal()
+const { handleDeleteMp3} = useMp3Delete()
+watch(currentPage,async(newValue)=>{
+  currentPage.value = newValue;
+  await getMp3List(currentPage.value);
+})
 onMounted(async () => {
   await getMp3List()
   loading.value = false
