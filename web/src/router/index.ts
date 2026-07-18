@@ -1,10 +1,18 @@
-
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/mp3',
     component: () => import("@/views/mp3/Mp3View.vue")
+  },
+  {
+    path:'/playlist',
+    children:[
+      {
+        path:'form',
+        component:() => import("@/views/playlist/PlaylistGenerationFormView.vue")
+      }
+    ]
   }
 ]
 const router = createRouter({
