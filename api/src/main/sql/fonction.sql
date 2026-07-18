@@ -20,8 +20,8 @@ CREATE OR REPLACE FUNCTION generer_playlist(
 )
 RETURNS TABLE(
     id INTEGER,
-    libelle_genre VARCHAR,
     nom_artiste VARCHAR,
+    libelle_genre VARCHAR,
     libelle_langue VARCHAR,
     duree INTEGER
 ) AS $$
@@ -49,8 +49,8 @@ BEGIN
 
         RETURN QUERY SELECT
             mp3_courant.id,
-            mp3_courant.libelle_genre,
             mp3_courant.nom_artiste,
+            mp3_courant.libelle_genre,
             mp3_courant.libelle_langue,
             mp3_courant.duree;
     END LOOP;
