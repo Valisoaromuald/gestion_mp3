@@ -1,0 +1,36 @@
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 50px;
+    margin-left: 50px;
+    font-size: 12px;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-sq {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+:root {
+  /* Couleurs */
+  --primary-color: #083869;
+  --surface-color: #ffffff;
+  --bg-gray: #fcfdff;
+  --text-color: #0f172a;
+  --w-color: #ffffff;
+  --text-muted-custom: #64748b;
+  --border-color: #d6d9e6;
+
+  /* Skeleton */
+  --skeleton-bg: #e9e9ea;
+  --skeleton-highlight: rgba(221, 224, 224, 0.726);
+}

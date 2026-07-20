@@ -2,5 +2,5 @@
     <PlaylistGenerationForm/>
 </template>
 <script setup lang="ts">
-import PlaylistGenerationForm from '@/components/playlist/PlaylistGenerationForm.vue';
+import PlaylistGenerationForm from '@/components/playlist/PlaylistGeneration.vue';
 </script>

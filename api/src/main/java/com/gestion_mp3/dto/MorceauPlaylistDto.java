@@ -16,4 +16,6 @@ public class MorceauPlaylistDto {
     private String libelleGenre;
     private String libelleLangue;
     private Integer duree;
+    private String titre;
+    private String url;
 }

@@ -9,8 +9,8 @@ const routes = [
     path:'/playlist',
     children:[
       {
-        path:'form',
-        component:() => import("@/views/playlist/PlaylistGenerationFormView.vue")
+        path:'generation',
+        component:() => import("@/views/playlist/PlaylistGenerationView.vue")
       }
     ]
   }

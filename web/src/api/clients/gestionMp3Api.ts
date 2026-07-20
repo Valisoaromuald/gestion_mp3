@@ -8,15 +8,30 @@ class GestionMp3Api {
             baseURL: import.meta.env.API_URL,
         })
     }
-    public async get<T = any>(endpoint: string, params: any = {}): Promise<AxiosResponse<T>> {
-        return this.instance.get<T>(endpoint, { params })
+    public async get<T = any>(
+        endpoint: string,
+        params: any = {},
+        config?: AxiosRequestConfig
+    ): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>(endpoint, {
+            params,
+            paramsSerializer: {
+                indexes: null 
+            },
+            ...config
+        })
     }
     public async post<T = any>(
         endpoint: string,
         data: any = {},
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<T>> {
-        return this.instance.post<T>(endpoint, data, config);
+        return this.instance.post<T>(endpoint, data,{
+            paramsSerializer: {
+                indexes: null 
+            },
+            ...config
+        } );
     }
     public async put<T = any>(endpoint: string, data: any = {}): Promise<AxiosResponse<T>> {
         return this.instance.put(endpoint, data)

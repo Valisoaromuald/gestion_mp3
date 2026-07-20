@@ -23,7 +23,8 @@ RETURNS TABLE(
     nom_artiste VARCHAR,
     libelle_genre VARCHAR,
     libelle_langue VARCHAR,
-    duree INTEGER
+    duree BIGINT,
+    titre VARCHAR
 ) AS $$
 DECLARE
     mp3_courant RECORD;
@@ -33,6 +34,7 @@ BEGIN
     SELECT
         m.id,
         meta.duree,
+        meta.titre,
         a.nom AS nom_artiste,
         g.libelle AS libelle_genre,
         l.libelle AS libelle_langue
@@ -52,7 +54,8 @@ BEGIN
             mp3_courant.nom_artiste,
             mp3_courant.libelle_genre,
             mp3_courant.libelle_langue,
-            mp3_courant.duree;
+            mp3_courant.duree,
+            mp3_courant.titre;
     END LOOP;
     RETURN;
 END;

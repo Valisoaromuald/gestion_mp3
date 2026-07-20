@@ -32,6 +32,9 @@ public class PlaylistJdbcRepository {
             .nomArtiste(rs.getString("nom_artiste"))
             .libelleGenre(rs.getString("libelle_genre"))
             .libelleLangue(rs.getString("libelle_langue"))
-            .duree(rs.getInt("duree")).build());
+            .duree(rs.getInt("duree"))
+            .titre(rs.getString("titre"))
+            .url("/api/mp3/stream/" +rs.getInt("id"))
+            .build());
     }
 }
