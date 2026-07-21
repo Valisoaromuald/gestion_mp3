@@ -6,6 +6,7 @@ import com.gestion_mp3.api.model.Genre;
 import com.gestion_mp3.api.model.Langue;
 import com.gestion_mp3.api.model.Mp3;
 import com.gestion_mp3.api.service.Mp3Service;
+import com.gestion_mp3.dto.MorceauPlaylistDto;
 import com.gestion_mp3.dto.Mp3Dto;
 import com.gestion_mp3.dto.Mp3ResponseDto;
 import com.gestion_mp3.dto.PageResponseDto;
@@ -128,5 +129,12 @@ public class Mp3Controller {
     public ResponseEntity<Void> supprimer(@PathVariable Integer id) {
         service.supprimer(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/{id}/candidats")
+    public ResponseEntity<List<MorceauPlaylistDto>> getCandidates(
+        @PathVariable Integer id,
+        @RequestParam List<Integer> excludedIds
+    ) {
+        return ResponseEntity.ok(service.getCandidates(id, excludedIds));
     }
 }

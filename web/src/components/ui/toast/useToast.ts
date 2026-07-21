@@ -10,7 +10,6 @@ export interface Toast {
 
 // État global partagé par tous les composants qui utilisent useToast()
 const toasts = ref<Toast[]>([])
-
 let nextId = 1
 
 function push(message: string, type: ToastType = 'success', duration: number = 3000): number {

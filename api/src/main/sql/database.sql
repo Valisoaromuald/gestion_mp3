@@ -92,23 +92,16 @@ CREATE TABLE utilisateur(
    nom VARCHAR(50),
    login VARCHAR(50) NOT NULL UNIQUE,  -- 🔧 UNIQUE ajouté
    mot_de_passe VARCHAR(50) NOT NULL,
-   date_creation TIMESTAMP NOT NULL DEFAULT now(),  -- 🔧 valeur par défaut pratique
+   date_creation TIMESTAMP NOT NULL DEFAULT now(),  
    PRIMARY KEY(id)
 );
 
 CREATE TABLE playlist(
    id SERIAL,
    date_creation TIMESTAMP NOT NULL DEFAULT now(),
-   PRIMARY KEY(id)
-);
-
-CREATE TABLE playlist_utilisateur(
-   id SERIAL,  -- 🔧 corrigé : SERIAL au lieu de INTEGER (incohérence corrigée)
-   id_playlist INTEGER NOT NULL,
-   id_utilisateur INTEGER NOT NULL,
+   id_utilisateur ,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_playlist) REFERENCES playlist(id) ON DELETE CASCADE,
-   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE
+   FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE,
 );
 
 CREATE TABLE playlist_mp3(
