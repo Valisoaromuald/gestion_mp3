@@ -15,8 +15,12 @@ import com.gestion_mp3.api.repository.LangueRepository;
 import com.gestion_mp3.api.repository.MetadataRepository;
 import com.gestion_mp3.api.repository.Mp3FichierRepository;
 import com.gestion_mp3.api.repository.Mp3Repository;
+import com.gestion_mp3.dto.MorceauPlaylistDto;
+
+import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -136,5 +140,16 @@ public class Mp3Service {
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mp3 introuvable avec l'id : " + id));
 
         repository.delete(mp3);
+    }
+    public List<MorceauPlaylistDto> getCandidates(Integer morceauId, List<Integer> playlistIds) {
+        Mp3 morceau = repository.findById(morceauId.intValue())
+                .orElseThrow(() -> new EntityNotFoundException("Morceau introuvable: " + morceauId));
+
+        Integer genreId = morceau.getGenre().getId();
+        Integer langueId = morceau.getLangue() != null ? morceau.getLangue().getId() : null;
+        Long duree = morceau.getMetadata().getDuree();
+
+        return repository.findCandidates(
+                genreId, langueId, playlistIds, duree.intValue(), PageRequest.of(0, 10));
     }
 }

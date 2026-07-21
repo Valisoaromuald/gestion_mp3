@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MorceauPlaylistDto {
     // id mp3
-    private Integer id;
+    private Integer mp3Id;
     private String nomArtiste;
     private String libelleGenre;
     private String libelleLangue;
-    private Integer duree;
+    private Long duree;
     private String titre;
     private String url;
 }

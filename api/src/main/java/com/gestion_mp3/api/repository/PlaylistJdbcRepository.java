@@ -28,13 +28,13 @@ public class PlaylistJdbcRepository {
             ps.setArray(3, ps.getConnection().createArrayOf("integer", idsLangues));
             ps.setArray(4, ps.getConnection().createArrayOf("integer", idsGenres));
         }, (rs, rowNum) -> MorceauPlaylistDto.builder()
-            .id(rs.getInt("id"))
+            .mp3Id(rs.getInt("mp3_id"))
             .nomArtiste(rs.getString("nom_artiste"))
             .libelleGenre(rs.getString("libelle_genre"))
             .libelleLangue(rs.getString("libelle_langue"))
-            .duree(rs.getInt("duree"))
+            .duree(rs.getLong("duree"))
             .titre(rs.getString("titre"))
-            .url("/api/mp3/stream/" +rs.getInt("id"))
+            .url("/api/mp3/stream/" +rs.getInt("mp3_id"))
             .build());
     }
 }

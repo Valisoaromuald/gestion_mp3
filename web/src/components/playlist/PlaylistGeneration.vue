@@ -42,9 +42,15 @@
         </div>
         <div class="card" v-if="generatedPlaylist.length !== 0">
             <div class="card-body">
-                <BaseTable :columns="playlistColumns" :items="generatedPlaylist">
+                <BaseTable :columns="playlistColumns" :items="generatedPlaylist" :page-size="5">
                     <template #cell-url="{ item }">
                         <audio :src="`http://localhost:8080${item.url}`" controls></audio>
+                    </template>
+                    <template #cell-actions="{ item }">
+                        <div class="d-flex gap-2">
+                            <BaseButton variant="success" @click="openReplace(item)">Remplacer</BaseButton>
+                            <BaseButton variant="danger" @click="deleteTrack(item.id)">Supprimer</BaseButton>
+                        </div>
                     </template>
                 </BaseTable>
                 <BaseButton @click="handleOpenPlaylistModal" class="mt-4">Sauvegarder</BaseButton>
@@ -58,15 +64,25 @@
         </div>
         <template #footer="{ close }">
             <BaseButton variant="secondary" @click="close">Fermer</BaseButton>
-            <BaseButton  @click="saveGeneratedPlaylist(playlistName)">Enregistrer</BaseButton>
+            <BaseButton @click="saveGeneratedPlaylist(playlistName)">Enregistrer</BaseButton>
         </template>
     </BaseModal>
 
+    <BaseModal v-model="openReplaceModal" title="Remplacer le morceau" size="md">
+        <p>Morceau actuel : {{ trackToReplace?.titre }} — {{ trackToReplace?.nomArtiste }}</p>
+        <VueMultiselect v-model="selectedReplacement" :options="candidateTracks" label="titre" track-by="id"
+            placeholder="Choisir un morceau de remplacement" />
+        <audio v-if="selectedReplacement" :src="`http://localhost:8080${selectedReplacement.url}`" controls></audio>
+        <template #footer="{ close }">
+            <BaseButton variant="secondary" @click="close">Annuler</BaseButton>
+            <BaseButton :disabled="!selectedReplacement" @click="confirmReplace(close)">Confirmer</BaseButton>
+        </template>
+    </BaseModal>
 </template>
 <script setup lang="ts">
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
-import { usePlaylistForm } from '@/composables/playlist/usePlaylistForm';
+import { usePlaylistGeneration } from '@/composables/playlist/usePlaylistGeneration.ts';
 import { onMounted, ref } from 'vue';
 import BaseButton from '../ui/button/BaseButton.vue';
 import type { TableColumn } from '../ui/table/BaseTable.types.ts';
@@ -76,7 +92,9 @@ import { useDurationConverter } from '@/composables/global/useDurationConverter.
 import BaseModal from '../ui/modal/BaseModal.vue';
 import BaseInput from '../ui/input/BaseInput.vue';
 
-const { genres, artistes, langues, playlistGenerationForm, generatedPlaylist,playlistName, defaultForm, getInitialData, generatePlaylist, saveGeneratedPlaylist } = usePlaylistForm()
+const { genres, artistes, langues, playlistGenerationForm, generatedPlaylist, playlistName, openReplaceModal,candidateTracks,
+    trackToReplace,
+    selectedReplacement, defaultForm, getInitialData, generatePlaylist, saveGeneratedPlaylist, deleteTrack, confirmReplace,openReplace } = usePlaylistGeneration()
 const { convertInHHMMSS } = useDurationConverter()
 const openModal = ref<boolean>(false)
 onMounted(async () => {
@@ -88,7 +106,6 @@ function handleReset() {
 function handleOpenPlaylistModal() {
     openModal.value = !openModal.value
 }
-
 const playlistColumns: TableColumn<IMorceauPlaylist>[] = [
     { key: "nomArtiste", label: "artiste", align: "center" },
     { key: "titre", label: "titre", align: "center" },
@@ -96,5 +113,6 @@ const playlistColumns: TableColumn<IMorceauPlaylist>[] = [
     { key: "libelleLangue", label: "langue", align: "center" },
     { key: "url", label: "mp3", align: 'center' },
     { key: "duree", label: "duree", formatter: (v) => convertInHHMMSS(v), align: "center", total: true, totalFormatter: (v) => convertInHHMMSS(v) },
+    { key: "actions", label: "Actions", align: "center" }
 ]
 </script>

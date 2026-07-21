@@ -338,9 +338,6 @@
                             <td v-if="multiSelect"></td>
                             <td v-for="column in normalizedColumns" :key="column.key"
                                 :class="['page-total', column.footer ? 'align-start' : '']">
-                                <template v-if="column.total" title="Total page actuelle">
-                                    Page: {{ formatNumber(getPageTotal(column.key)) }}
-                                </template>
                             </td>
                         </tr>
                     </tfoot>

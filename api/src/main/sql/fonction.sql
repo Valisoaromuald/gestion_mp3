@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION generer_playlist(
     idsGenres INTEGER[]
 )
 RETURNS TABLE(
-    id INTEGER,
+    mp3_id INTEGER,
     nom_artiste VARCHAR,
     libelle_genre VARCHAR,
     libelle_langue VARCHAR,
@@ -32,7 +32,7 @@ DECLARE
 BEGIN
     FOR mp3_courant IN
     SELECT
-        m.id,
+        m.id AS mp3_id,
         meta.duree,
         meta.titre,
         a.nom AS nom_artiste,
@@ -50,7 +50,7 @@ BEGIN
         duree_cumulee := duree_cumulee + mp3_courant.duree;
 
         RETURN QUERY SELECT
-            mp3_courant.id,
+            mp3_courant.mp3_id,
             mp3_courant.nom_artiste,
             mp3_courant.libelle_genre,
             mp3_courant.libelle_langue,

@@ -1,6 +1,7 @@
 export interface IMorceauPlaylist{
-    id: number
+    mp3Id: number
     duree:number
+    titre:string
     nomArtiste: string
     libelleGenre:string
     libelleLangue:string
