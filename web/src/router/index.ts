@@ -2,10 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path:"/",
-    component : ()=> import("@/views/login/LoginView.vue")
-  },
-  {
     path: '/mp3',
     component: () => import("@/views/mp3/Mp3View.vue")
   },

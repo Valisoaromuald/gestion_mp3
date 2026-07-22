@@ -43,6 +43,9 @@
   /* Skeleton */
   --skeleton-bg: #e9e9ea;
   --skeleton-highlight: rgba(221, 224, 224, 0.726);
+  --error-color: #e05252;
+  --error-bg: #2a1a1a;
+  --error-border: #b23a3a;
 }
 
 html, body, #app {
