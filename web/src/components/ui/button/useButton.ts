@@ -12,6 +12,10 @@ export function useButton(props: ButtonProps) {
         return "btn-success"
       case "secondary":
         return "btn-secondary"
+      case "warning":
+        return "btn-warning"
+      case "info": 
+      return "btn-info"
       default:
         return "btn-primary"
     }

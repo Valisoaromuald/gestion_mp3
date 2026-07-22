@@ -104,6 +104,8 @@ public class Mp3Controller {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .contentLength(fichier.length)
                 .body(fichier);
     }
 
@@ -130,11 +132,11 @@ public class Mp3Controller {
         service.supprimer(id);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/{id}/candidats")
     public ResponseEntity<List<MorceauPlaylistDto>> getCandidates(
-        @PathVariable Integer id,
-        @RequestParam List<Integer> excludedIds
-    ) {
+            @PathVariable Integer id,
+            @RequestParam List<Integer> excludedIds) {
         return ResponseEntity.ok(service.getCandidates(id, excludedIds));
     }
 }
