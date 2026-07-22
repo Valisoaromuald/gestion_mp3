@@ -91,21 +91,20 @@ CREATE TABLE utilisateur(
    id SERIAL,
    nom VARCHAR(50),
    login VARCHAR(50) NOT NULL UNIQUE,  -- 🔧 UNIQUE ajouté
-   mot_de_passe VARCHAR(50) NOT NULL,
-   date_creation TIMESTAMP NOT NULL DEFAULT now(),  
+   mot_de_passe VARCHAR(50) NOT NULL,  
    PRIMARY KEY(id)
 );
 
 CREATE TABLE playlist(
    id SERIAL,
-   date_creation TIMESTAMP NOT NULL DEFAULT now(),
-   id_utilisateur ,
+   id_utilisateur INTEGER NOT NULL,
    PRIMARY KEY(id),
    FOREIGN KEY(id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE,
 );
 
 CREATE TABLE playlist_mp3(
    id SERIAL,
+   nom VARCHAR(100) NOT NULL,
    id_mp3 INTEGER NOT NULL,
    id_playlist INTEGER NOT NULL,
    PRIMARY KEY(id),

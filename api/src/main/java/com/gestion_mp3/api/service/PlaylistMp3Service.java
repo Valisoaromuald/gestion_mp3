@@ -3,6 +3,9 @@ package com.gestion_mp3.api.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.gestion_mp3.api.model.Mp3;
+import com.gestion_mp3.api.model.Playlist;
 import com.gestion_mp3.api.model.PlaylistMp3;
 import com.gestion_mp3.api.repository.PlaylistMp3Repository;
 
@@ -17,9 +20,9 @@ public class PlaylistMp3Service {
 
     public Integer ajouterMp3(Integer idMp3, Integer idPlaylist) {
         PlaylistMp3 playlistMp3 = PlaylistMp3.builder()
-            .idMp3(idMp3)
-            .idPlaylist(idPlaylist)
-            .build();
+                .mp3(new Mp3(idMp3, null, null, null, null, null, null))
+                .playlist(new Playlist(idPlaylist, null, null))
+                .build();
 
         PlaylistMp3 enregistre = playlistMp3Repository.save(playlistMp3);
         return enregistre.getId();
@@ -27,16 +30,16 @@ public class PlaylistMp3Service {
 
     public List<Integer> ajouterPlusieursMp3(List<Integer> idsMp3, Integer idPlaylist) {
         List<PlaylistMp3> playlistMp3s = idsMp3.stream()
-            .map(idMp3 -> PlaylistMp3.builder()
-                .idMp3(idMp3)
-                .idPlaylist(idPlaylist)
-                .build())
-            .toList();
+                .map(idMp3 -> PlaylistMp3.builder()
+                        .mp3(new Mp3(idMp3, null, null, null, null, null, null))
+                        .playlist(new Playlist(idPlaylist, null, null))
+                        .build())
+                .toList();
 
         List<PlaylistMp3> enregistres = playlistMp3Repository.saveAll(playlistMp3s);
 
         return enregistres.stream()
-            .map(PlaylistMp3::getId)
-            .toList();
+                .map(PlaylistMp3::getId)
+                .toList();
     }
 }

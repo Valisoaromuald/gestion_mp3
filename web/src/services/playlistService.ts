@@ -1,7 +1,7 @@
 import type { IPlaylist } from "@/types/playlist"
 
 class PlaylistService{
-    endpoint : string ='api/playlist'
+    endpoint : string ='api/playlists'
     createInputObject(playlistName:string,idUtilisateur:number):Partial<IPlaylist>{
         return {
             nom:playlistName,

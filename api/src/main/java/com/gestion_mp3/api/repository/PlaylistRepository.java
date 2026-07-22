@@ -9,8 +9,20 @@ import org.springframework.stereotype.Repository;
 
 import com.gestion_mp3.api.model.Playlist;
 import com.gestion_mp3.dto.MorceauPlaylistDto;
+import com.gestion_mp3.dto.PlaylistListDto;
 
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
-    
+    @Query("""
+        SELECT new com.gestion_mp3.dto.PlaylistListDto(
+            p.id, p.nom, COUNT(pm.id), COALESCE(SUM(md.duree), 0)
+        )
+        FROM Playlist p
+        LEFT JOIN PlaylistMp3 pm ON pm.playlist = p
+        LEFT JOIN pm.mp3 m
+        LEFT JOIN m.metadata md
+        GROUP BY p.id, p.nom
+        ORDER BY p.id DESC
+    """)
+    List<PlaylistListDto> findAllWithStats();    
 }

@@ -22,15 +22,30 @@
 
 :root {
   /* Couleurs */
-  --primary-color: #083869;
-  --surface-color: #ffffff;
-  --bg-gray: #fcfdff;
-  --text-color: #0f172a;
+  --body-color: #12181B;
+  --primary-color: #35b2e0;
+  --surface-color: #171F22;
+  --bg-gray: #212c30;
+  --text-color: #effcfd;
   --w-color: #ffffff;
-  --text-muted-custom: #64748b;
+  --text-muted-custom: #35b2e0;
   --border-color: #d6d9e6;
+
+  /* 🔧 Ajouts pour cohérence sur les composants sombres (ex: lecteur) */
+  --text-secondary: #8fa9b0;      /* sous-titres, artiste */
+  --text-tertiary: #5f7278;       /* métadonnées discrètes, durées */
+  --border-subtle: #2a3236;       /* séparateurs sur fond sombre */
+  --surface-hover: #1e2629;       /* survol de ligne (liste, queue) */
+  --surface-active: #223028;      /* élément actif/sélectionné */
+  --disc-groove: #23292c;         /* sillons du disque */
+  --disc-groove-dark: #1c2225;    /* sillons alternés + bordure disque */
 
   /* Skeleton */
   --skeleton-bg: #e9e9ea;
   --skeleton-highlight: rgba(221, 224, 224, 0.726);
+}
+
+html, body, #app {
+    background-color: var(--body-color);
+    min-height: 100%;
 }
