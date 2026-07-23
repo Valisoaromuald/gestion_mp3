@@ -68,9 +68,9 @@ const visiblePages = computed(() => {
 })
 
 const showFirstPage = computed(() => visiblePages.value[0]! > 0)
-const showStartEllipsis = computed(() => visiblePages.value[0]!> 1)
+const showStartEllipsis = computed(() => visiblePages.value[0]! > 1)
 const showLastPage = computed(() => visiblePages.value[visiblePages.value.length - 1]! < props.totalPages - 1)
-const showEndEllipsis = computed(() => visiblePages.value[visiblePages.value.length - 1]!< props.totalPages - 2)
+const showEndEllipsis = computed(() => visiblePages.value[visiblePages.value.length - 1]! < props.totalPages - 2)
 
 function goTo(page: number) {
   if (page < 0 || page > props.totalPages - 1) return
@@ -78,3 +78,42 @@ function goTo(page: number) {
   emit('update:currentPage', page)
 }
 </script>
+
+<style scoped>
+.pagination {
+    margin-top: 20px;
+    gap: 4px;
+}
+
+.page-link {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: var(--surface-hover);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.page-link:focus {
+    box-shadow: 0 0 0 0.2rem rgba(53, 178, 224, 0.25);
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--body-color);
+    font-weight: 600;
+}
+
+.page-item.disabled .page-link {
+    background-color: transparent;
+    border-color: var(--border-subtle);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+}
+</style>

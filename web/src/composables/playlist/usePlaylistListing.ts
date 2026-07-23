@@ -5,15 +5,16 @@ import { playlistService } from '@/services/playlistService'
 import { useToast } from '@/components/ui/toast/useToast'
 import type { IPlaylist } from '@/types/playlist'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 
 export function usePlaylistListing() {
     const playlists = ref<IPlaylist[]>([])
     const toast = useToast()
     const router = useRouter()
-
+    const authStore = useAuthStore()
     async function getPlaylists() {
         try {
-            playlists.value = (await gestionMp3Api.get<IPlaylist[]>(playlistService.endpoint)).data
+            playlists.value = (await gestionMp3Api.get<IPlaylist[]>(playlistService.endpoint+`/utilisateurs/${authStore.user.id}`)).data
         } catch (error) {
             toast.notifyError("Erreur lors du chargement des playlists")
             throw error

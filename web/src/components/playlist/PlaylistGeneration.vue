@@ -12,7 +12,7 @@
                             step="1">
                     </div>
                     <div class="col-md-6">
-                        <label for="artist">Artiste(s) a inclure</label>
+                        <label for="artist" class="form-label">Artiste(s) a inclure</label>
                         <VueMultiselect id="artist" v-model="playlistGenerationForm.artistesSelectionnes"
                             :options="artistes" :multiple="true" :close-on-select="false" label="nom" track-by="id"
                             placeholder="Sélectionner un ou plusieurs artiste(s)" />
@@ -20,13 +20,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="genre">Genre(s)</label>
+                        <label for="genre" class="form-label">Genre(s)</label>
                         <VueMultiselect id="genre" v-model="playlistGenerationForm.genresSelectionnes" :options="genres"
                             :multiple="true" :close-on-select="false" label="libelle" track-by="id"
                             placeholder="Sélectionner un ou plusieurs genre(s)" />
                     </div>
                     <div class="col-md-6">
-                        <label for="langue">Langue(s)</label>
+                        <label for="langue" class="form-label">Langue(s)</label>
                         <VueMultiselect id="langue" v-model="playlistGenerationForm.languesSelectionnees"
                             :options="langues" :multiple="true" :close-on-select="false" label="libelle" track-by="id"
                             placeholder="Sélectionner une ou plusieurs langue(s)" />
@@ -92,9 +92,9 @@ import { useDurationConverter } from '@/composables/global/useDurationConverter.
 import BaseModal from '../ui/modal/BaseModal.vue';
 import BaseInput from '../ui/input/BaseInput.vue';
 
-const { genres, artistes, langues, playlistGenerationForm, generatedPlaylist, playlistName, openReplaceModal,candidateTracks,
+const { genres, artistes, langues, playlistGenerationForm, generatedPlaylist, playlistName, openReplaceModal, candidateTracks,
     trackToReplace,
-    selectedReplacement, defaultForm, getInitialData, generatePlaylist, saveGeneratedPlaylist, deleteTrack, confirmReplace,openReplace } = usePlaylistGeneration()
+    selectedReplacement, defaultForm, getInitialData, generatePlaylist, saveGeneratedPlaylist, deleteTrack, confirmReplace, openReplace } = usePlaylistGeneration()
 const { convertInHHMMSS } = useDurationConverter()
 const openModal = ref<boolean>(false)
 onMounted(async () => {
@@ -116,3 +116,111 @@ const playlistColumns: TableColumn<IMorceauPlaylist>[] = [
     { key: "actions", label: "Actions", align: "center" }
 ]
 </script>
+
+<style scoped>
+.card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.card-header {
+    background-color: var(--bg-gray);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.form-label,
+label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--bg-gray);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(53, 178, 224, 0.25);
+}
+
+.form-control[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+    cursor: pointer;
+}
+
+audio {
+    filter: invert(0.85) hue-rotate(180deg) brightness(1.1);
+    border-radius: 6px;
+}
+
+/* ==== Overrides vue-multiselect (composant tiers, DOM hors template) ==== */
+:deep(.multiselect) {
+    color: var(--text-color);
+}
+
+:deep(.multiselect__tags) {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    min-height: 38px;
+}
+
+:deep(.multiselect__input),
+:deep(.multiselect__single) {
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+:deep(.multiselect__placeholder) {
+    color: var(--text-tertiary);
+    padding-top: 2px;
+}
+
+:deep(.multiselect__content-wrapper) {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+}
+
+:deep(.multiselect__option) {
+    color: var(--text-color);
+}
+
+:deep(.multiselect__option--highlight) {
+    background-color: var(--primary-color);
+    color: var(--body-color);
+}
+
+:deep(.multiselect__option--selected) {
+    background-color: var(--surface-active);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+:deep(.multiselect__option--selected.multiselect__option--highlight) {
+    background-color: var(--error-color);
+    color: var(--w-color);
+}
+
+:deep(.multiselect__tag) {
+    background-color: var(--primary-color);
+    color: var(--body-color);
+}
+
+:deep(.multiselect__tag-icon:after) {
+    color: var(--body-color);
+}
+
+:deep(.multiselect__tag-icon:hover) {
+    background-color: #2a9bc4;
+}
+
+:deep(.multiselect__select::before) {
+    border-color: var(--text-secondary) transparent transparent;
+}
+</style>

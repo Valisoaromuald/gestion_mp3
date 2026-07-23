@@ -46,8 +46,8 @@ public class PlaylistService {
         return playlistEnregistree.getId();
     }
 
-    public List<PlaylistListDto> findAll() {
-        return repository.findAllWithStats();
+    public List<PlaylistListDto> findAllByUserId(Integer userId) {
+        return repository.findAllWithStatsByUserId(userId);
     }
 
     public byte[] genererZip(Integer playlistId) {

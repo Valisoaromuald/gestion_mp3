@@ -55,9 +55,9 @@ public class PlaylistController {
         return ResponseEntity.ok(idPlaylistCree);
     }
 
-    @GetMapping
-    public ResponseEntity<List<PlaylistListDto>> findAll() {
-        return ResponseEntity.ok(playlistService.findAll());
+    @GetMapping("/utilisateurs/{id}")
+    public ResponseEntity<List<PlaylistListDto>> findAllByUserId(@PathVariable("id") Integer userId) {
+        return ResponseEntity.ok(playlistService.findAllByUserId(userId));
     }
 
     @GetMapping("/{id}/download")

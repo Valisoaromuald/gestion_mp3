@@ -62,7 +62,7 @@ async function handleSubmit() {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,18 +70,66 @@ async function handleSubmit() {
 }
 
 .modal-dialog {
-    background-color: #ffffff;
+    background-color: var(--surface-color);
+    color: var(--text-color);
     padding: 2rem;
     max-width: 700px;
     width: 100%;
+    border: 1px solid var(--border-subtle);
     border-radius: 0.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     pointer-events: auto;
-    position: relative; 
+    position: relative;
 }
-.modal-dialog {
-    background-color: var(--bs-body-bg);  /* 👈 s'adapte au thème */
-    color: var(--bs-body-color);
+
+.display-5 {
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--bg-gray);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(53, 178, 224, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--body-color);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #2a9bc4;
+    border-color: #2a9bc4;
+}
+
+.btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border-color: var(--border-subtle);
 }
 
 .btn-close-custom {
@@ -92,7 +140,7 @@ async function handleSubmit() {
     border: none;
     font-size: 1.75rem;
     line-height: 1;
-    color: #6c757d;
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 0;
     width: 2rem;
@@ -105,8 +153,8 @@ async function handleSubmit() {
 }
 
 .btn-close-custom:hover {
-    background-color: #f1f1f1;
-    color: #000;
+    background-color: var(--surface-hover);
+    color: var(--primary-color);
 }
 
 .modalTransition-enter-active,
@@ -138,6 +186,4 @@ async function handleSubmit() {
 .modalTransition-leave-from .modal-dialog {
     transform: translateY(0);
 }
-
-
 </style>
