@@ -53,7 +53,7 @@
                     <input type="range" class="progress-bar"
                         :style="{ '--progress': `${duration ? (displayTime / duration) * 100 : 0}%` }" min="0"
                         :max="duration || 0" step="0.1" :value="displayTime" @input="onScrub" @mousedown="startScrub"
-                        @touchstart="startScrub" />
+                        @touchstart="startScrub" @mouseup="endScrub" @touchend="endScrub" />
                     <span class="time">{{ formatTime(duration) }}</span>
                 </div>
 
@@ -198,6 +198,8 @@ function endScrub() {
 watch(currentIndex, () => {
     currentTime.value = 0
     duration.value = 0
+    scrubTime.value = 0
+    isScrubbing.value = false
 })
 </script>
 
@@ -433,7 +435,8 @@ watch(currentIndex, () => {
     appearance: none;
     height: 4px;
     border-radius: 2px;
-    background: transparent; /* le fond réel est géré par le track ci-dessous */
+    background: transparent;
+    /* le fond réel est géré par le track ci-dessous */
     cursor: pointer;
     outline: none;
 }
@@ -442,13 +445,11 @@ watch(currentIndex, () => {
 .progress-bar::-webkit-slider-runnable-track {
     height: 4px;
     border-radius: 2px;
-    background: linear-gradient(
-        to right,
-        var(--primary-color) 0%,
-        var(--primary-color) var(--progress, 0%),
-        var(--border-subtle) var(--progress, 0%),
-        var(--border-subtle) 100%
-    );
+    background: linear-gradient(to right,
+            var(--primary-color) 0%,
+            var(--primary-color) var(--progress, 0%),
+            var(--border-subtle) var(--progress, 0%),
+            var(--border-subtle) 100%);
 }
 
 .progress-bar::-webkit-slider-thumb {
@@ -460,7 +461,8 @@ watch(currentIndex, () => {
     background: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(53, 178, 224, 0.25);
     cursor: pointer;
-    margin-top: -4px; /* recentre le thumb sur une piste de 4px */
+    margin-top: -4px;
+    /* recentre le thumb sur une piste de 4px */
     transition: transform 0.15s ease;
 }
 
