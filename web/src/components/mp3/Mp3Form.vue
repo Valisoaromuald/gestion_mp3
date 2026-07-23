@@ -33,8 +33,22 @@
             </div>
 
             <div class="col-md-6">
-                <label for="duree" class="form-label">Durée</label>
-                <input class="form-control" type="time" id="duree" v-model="formData.duree" step="1">
+                <label class="form-label">Durée</label>
+                <div class="duree-display">
+                    <span v-if="dureeLoading" class="text-secondary">
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Calcul en cours...
+                    </span>
+                    <span v-else-if="dureeError" class="text-error">
+                        {{ dureeError }}
+                    </span>
+                    <span v-else-if="formData.duree" class="text-color">
+                        <i class="bi bi-clock me-2"></i>{{ formData.duree }}
+                    </span>
+                    <span v-else class="text-tertiary">
+                        Sélectionnez un fichier pour calculer la durée
+                    </span>
+                </div>
             </div>
 
             <div class="col-12">
@@ -51,8 +65,7 @@
 import { useMorceauForm } from '@/composables/mp3/useMorceauForm'
 import { useToast } from '@/components/ui/toast/useToast'
 
-
-const { formData, anneeMax, handleFileChange, resetForm, isValid, insertMp3 } = useMorceauForm()
+const { formData, anneeMax, dureeLoading, dureeError, handleFileChange, resetForm, isValid, insertMp3 } = useMorceauForm()
 const toast = useToast()
 async function handleSubmit() {
     if (!isValid()) {
@@ -63,6 +76,103 @@ async function handleSubmit() {
     toast.notifyCreated("Mp3")
 }
 </script>
+
+<style scoped>
+.form-container {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 24px;
+    color: var(--text-color);
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--bg-gray);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(53, 178, 224, 0.25);
+}
+
+.form-control[type="file"]::file-selector-button {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-right: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+    background-color: var(--surface-active);
+}
+
+.duree-display {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 8px 12px;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+.text-color {
+    color: var(--text-color);
+}
+
+.text-tertiary {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+.text-error {
+    color: var(--error-color);
+    font-size: 0.9rem;
+}
+
+.spinner-border-sm {
+    color: var(--primary-color);
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--body-color);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #2a9bc4;
+    border-color: #2a9bc4;
+}
+
+.btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border-color: var(--border-subtle);
+}
+</style>
 
 <style scoped>
 .form-container {
