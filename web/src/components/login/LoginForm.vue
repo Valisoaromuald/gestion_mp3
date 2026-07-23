@@ -1,8 +1,13 @@
 <script lang="ts" setup>
+import {  useUtilisateur } from '@/composables/login/useUtilisateur';
 import { ref } from 'vue';
-const errorMessage = ref<string>('');
-const login = defineModel<string>('login', { type: String })
-const password = defineModel<string>('password', { type: String })
+
+const { errorMessage, isLoginLoading, loginForm, authentifier } = useUtilisateur()
+const showPassword = ref(false)
+
+function togglePasswordVisibility() {
+    showPassword.value = !showPassword.value
+}
 </script>
 
 <template>
@@ -11,17 +16,17 @@ const password = defineModel<string>('password', { type: String })
             <div class="card-body">
 
                 <h2 class="h3 fw-bold text-center mb-4 login-title">
-                    Mihaino hira
+                    <i class="bi bi-apple-music"></i>Melofy
                 </h2>
 
-                <form>
+                <form @submit.prevent="authentifier">
                     <!-- LOGIN -->
                     <div class="mb-3">
                         <label for="login" class="form-label fw-medium login-label">
                             Login
                         </label>
-                        <input id="login" type="text" class="form-control login-input" v-model="login"
-                            placeholder="exemple@email.com" />
+                        <input id="login" type="text" class="form-control login-input" v-model="loginForm.login"
+                            placeholder="ex. jeandupont" />
                     </div>
 
                     <!-- PASSWORD -->
@@ -29,12 +34,27 @@ const password = defineModel<string>('password', { type: String })
                         <label for="password" class="form-label fw-medium login-label">
                             Mot de passe
                         </label>
-                        <input id="password" type="password" class="form-control login-input" v-model="password"
-                            placeholder="••••••••" />
+                        <div class="password-wrapper">
+                            <input
+                                id="password"
+                                :type="showPassword ? 'text' : 'password'"
+                                class="form-control login-input password-input"
+                                v-model="loginForm.motDePasse"
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                @click="togglePasswordVisibility"
+                                :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+                            >
+                                <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn w-100 login-btn">
-                        Se connecter
+                    <button type="submit" class="btn w-100 login-btn" :disabled="isLoginLoading">
+                       {{ !isLoginLoading ? " Se connecter" : "Connexion..." }}
                     </button>
                 </form>
 
@@ -83,6 +103,41 @@ const password = defineModel<string>('password', { type: String })
     box-shadow: 0 0 0 3px rgba(53, 178, 224, 0.2);
 }
 
+/* --- Toggle mot de passe --- */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input {
+    padding-right: 2.75rem; /* laisse la place à l'icône */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
 .login-btn {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -97,10 +152,15 @@ const password = defineModel<string>('password', { type: String })
     opacity: 0.85;
     color: var(--body-color);
 }
-
+.login-btn:disabled{
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    opacity: 0.60;
+    color: var(--body-color);
+}
 .login-alert {
-    background-color: var(--surface-color);
-    border: 1px solid #b23a3a;
-    color: #f0a3a3;
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-color);
 }
 </style>

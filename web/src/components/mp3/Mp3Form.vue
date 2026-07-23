@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container form-container">
         <form class="row g-3" @submit.prevent="handleSubmit">
             <div class="col-md-6">
                 <label for="fichier" class="form-label">Fichier</label>
@@ -46,12 +46,13 @@
         </form>
     </div>
 </template>
+
 <script setup lang="ts">
 import { useMorceauForm } from '@/composables/mp3/useMorceauForm'
 import { useToast } from '@/components/ui/toast/useToast'
 
 
-const { formData, anneeMax, handleFileChange, resetForm, isValid,insertMp3 } = useMorceauForm()
+const { formData, anneeMax, handleFileChange, resetForm, isValid, insertMp3 } = useMorceauForm()
 const toast = useToast()
 async function handleSubmit() {
     if (!isValid()) {
@@ -62,3 +63,84 @@ async function handleSubmit() {
     toast.notifyCreated("Mp3")
 }
 </script>
+
+<style scoped>
+.form-container {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--text-color);
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    background-color: var(--bg-gray);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--bg-gray);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(53, 178, 224, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Champ file : bouton natif */
+.form-control[type="file"]::file-selector-button {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-right: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+    background-color: var(--surface-active);
+}
+
+/* Input number : masquer les flèches n'est pas nécessaire ici, on garde natif */
+
+/* Input date/time : forcer l'icône native en clair sur fond sombre */
+.form-control[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.5);
+    cursor: pointer;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--body-color);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #2a9bc4;
+    border-color: #2a9bc4;
+}
+
+.btn-outline-secondary {
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border-color: var(--border-subtle);
+}
+</style>

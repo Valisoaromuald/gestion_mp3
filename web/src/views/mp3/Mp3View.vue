@@ -1,6 +1,5 @@
 <template>
-    <div class="container">
-        <h1>CRUD MP3</h1>
+    <div class="container-fluid">
         <Mp3Form />
         <Mp3List />
         <Mp3Modal />

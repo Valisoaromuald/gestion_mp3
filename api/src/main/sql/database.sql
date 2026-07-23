@@ -91,7 +91,7 @@ CREATE TABLE utilisateur(
    id SERIAL,
    nom VARCHAR(50),
    login VARCHAR(50) NOT NULL UNIQUE,  -- 🔧 UNIQUE ajouté
-   mot_de_passe VARCHAR(50) NOT NULL,  
+   mot_de_passe VARCHAR(255) NOT NULL 
    PRIMARY KEY(id)
 );
 
